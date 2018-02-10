@@ -19,7 +19,7 @@ $(document).ready(function() {
      updateImageDisplay(); 
   });
 
-  showimagesFB();
+
   function updateImageDisplay() {
 
    var imagenSubir = input[0].files[0];
@@ -53,13 +53,44 @@ function showimagesFB(){
        var areaphotos = $('#arephotosFB');//****
        var result="";
        for(var key in datos){
-            result += '<div class="galeryfb col s6 m4 l4"><img class="imgfb" draggable="true" id="'+key+ '" src="'+datos[key].url + '"/></div>';
+            result += '<div class="galeryfb col s6 m4 l4"><img class="imgfb" draggable="true" id="' + key +'" src="'+ datos[key].url + '"/></div>';
             areaphotos.html(result); 
-        }
+            areaphotos.find('img').each(function (i, item) {
+              $(item).on('dragstart',function(event){        
+               event.originalEvent.dataTransfer.setData('text', event.target.id);
+               });      
+           }); 
+          // funcion drag and drop     
+            let collegeimg1 = $('.collge-one');
+           $.each(collegeimg1 , function(i, item) {
+                  $(item).on('dragstart',function(event){
+                  event.originalEvent.dataTransfer.setData('text', event.target.id);
+                });    
+           });   
+
+           areaphotos.find('div').each(function (i, itemdiv) {
+              $(itemdiv).on('dragover',function(event){
+                   event.preventDefault();
+                  });
+              $(itemdiv).on('drop',function(event){        
+               event.preventDefault();
+                   let data = event.originalEvent.dataTransfer.getData("text");
+                   event.target.append(document.getElementById(data));
+               });      
+          });
+
+   
+         }
+
+     });
+
         
-      });
+     
+
   }
+   
+   
+  showimagesFB();
 
 
-  
 });
